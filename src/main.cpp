@@ -79,7 +79,7 @@ static Config loadConfig(const std::string& confpath) {
         } else if (line.find("colorize:") == 0) {
             std::string val = line.substr(9);
             s = 0; while (s < val.size() && val[s] == ' ') s++;
-            c.colorize = (val.find("true") != std::string::npos);
+            c.doColorize = (val.find("true") != std::string::npos);
         } else if (line.find("cheatpaths:") == 0) {
             continue; /* just a marker */
         } else if (line.find("- name:") == 0) {
@@ -147,7 +147,7 @@ static void cmdView(std::vector<Sheet>& sheets, const std::string& name, bool co
 
     std::string text = it->text;
     if (colorize && !it->syntax.empty()) {
-        text = colorize(text, it->syntax);
+        text = applyColor(text, it->syntax);
     }
 
     fputs(text.c_str(), stdout);
@@ -169,7 +169,7 @@ static void cmdSearch(const std::vector<Sheet>& sheets, const std::string& phras
     for (auto& s : results) {
         printf("--- %s ---\n", s.title.c_str());
         std::string text = s.text;
-        if (colorize && !s.syntax.empty()) text = colorize(text, s.syntax);
+        if (colorize && !s.syntax.empty()) text = applyColor(text, s.syntax);
         /* Highlight the search term with ANSI reverse video */
         std::string lower = text;
         std::transform(lower.begin(), lower.end(), lower.begin(), ::tolower);
@@ -402,7 +402,7 @@ int main(int argc, char* argv[]) {
             for (auto& s : loaded) sheets.push_back(s);
         }
     } else if (!flagSearch.empty()) {
-        cmdSearch(sheets, flagSearch, flagRegex, flagCol || conf.colorize);
+        cmdSearch(sheets, flagSearch, flagRegex, flagCol || conf.doColorize);
     } else if (flagList || flagBrief) {
         if (flagBrief) {
             for (auto& s : sheets) printf("%s\n", s.title.c_str());
@@ -410,7 +410,7 @@ int main(int argc, char* argv[]) {
             cmdList(sheets);
         }
     } else if (!cheatsheet.empty()) {
-        cmdView(sheets, cheatsheet, flagCol || conf.colorize, conf.pager);
+        cmdView(sheets, cheatsheet, flagCol || conf.doColorize, conf.pager);
     } else {
         printUsage();
         return 0;

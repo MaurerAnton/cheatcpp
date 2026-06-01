@@ -26,7 +26,7 @@ std::vector<Sheet> loadSheetsFromDir(const std::string& dirPath,
                                       const std::vector<std::string>& parentTags = {});
 
 /* Apply ANSI color highlighting to text based on syntax. */
-std::string colorize(const std::string& text, const std::string& syntax);
+std::string applyColor(const std::string& text, const std::string& syntax);
 
 /* Search sheets for a phrase, return matching sheets. */
 std::vector<Sheet> searchSheets(const std::vector<Sheet>& sheets,

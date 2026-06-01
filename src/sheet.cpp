@@ -145,7 +145,7 @@ std::vector<Sheet> loadSheetsFromDir(const std::string& dirPath,
 }
 
 /* Simple ANSI color highlighter based on syntax name */
-std::string colorize(const std::string& text, const std::string& syntax) {
+std::string applyColor(const std::string& text, const std::string& syntax) {
     if (syntax.empty()) return text;
     if (text.empty()) return text;
 
